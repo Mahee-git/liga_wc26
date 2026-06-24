@@ -118,49 +118,57 @@
         </div>
 
         <!-- 2. FIXTURES TAB -->
-        <div x-show="activeTab === 'fixtures'" class="space-y-4" x-transition>
+        <div x-show="activeTab === 'fixtures'" class="space-y-6" x-transition>
             <h2 class="text-xl font-bold text-white mb-4">Match Fixtures & Results (8-Min Single Leg)</h2>
-            <div class="grid gap-4 max-w-3xl mx-auto">
-                <template x-for="match in matches" :key="match.id">
-                    <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 shadow hover:border-slate-700 transition">
-                        <div class="flex justify-between items-center text-xs text-slate-500 mb-2">
-                            <span class="font-semibold text-emerald-500" x-text="'Group ' + getTeamGroup(match.homeId)"></span>
-                            <span class="px-2 py-0.5 rounded bg-slate-900" :class="match.played ? 'text-emerald-400' : 'text-amber-400'" x-text="match.played ? 'Full Time' : 'Upcoming'"></span>
+            
+            <div class="grid gap-6 max-w-3xl mx-auto">
+                <template x-for="roundNum in [1, 2, 3]">
+                    <div class="space-y-3">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 border-l-2 border-emerald-500 pl-2" x-text="'Round ' + roundNum"></h3>
+                        <div class="grid gap-3">
+                            <template x-for="match in matches.filter(m => m.round === roundNum)" :key="match.id">
+                                <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 shadow hover:border-slate-700 transition">
+                                    <div class="flex justify-between items-center text-xs text-slate-500 mb-2">
+                                        <span class="font-semibold text-emerald-500" x-text="'Group ' + getTeamGroup(match.homeId)"></span>
+                                        <span class="px-2 py-0.5 rounded bg-slate-900" :class="match.played ? 'text-emerald-400' : 'text-amber-400'" x-text="match.played ? 'Full Time' : 'Upcoming'"></span>
+                                    </div>
+                                    
+                                    <!-- Scoreboard Area -->
+                                    <div class="grid grid-cols-7 items-center text-center my-2">
+                                        <div class="col-span-3 text-right pr-2">
+                                            <span class="block font-bold text-white" x-text="getTeamName(match.homeId)"></span>
+                                            <span class="block text-xs text-slate-400" x-text="'(' + getPlayerName(match.homeId) + ')'"></span>
+                                        </div>
+                                        <div class="col-span-1 bg-slate-900 py-2 rounded border border-slate-800 font-mono text-lg font-bold">
+                                            <span x-text="match.played ? match.homeScore : '-'"></span>
+                                            <span class="text-slate-600">:</span>
+                                            <span x-text="match.played ? match.awayScore : '-'"></span>
+                                        </div>
+                                        <div class="col-span-3 text-left pl-2">
+                                            <span class="block font-bold text-white" x-text="getTeamName(match.awayId)"></span>
+                                            <span class="block text-xs text-slate-400" x-text="'(' + getPlayerName(match.awayId) + ')'"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Detailed Stats -->
+                                    <template x-if="match.played">
+                                        <div class="mt-4 pt-3 border-t border-slate-900 text-xs text-slate-400 grid grid-cols-3 gap-y-1 max-w-sm mx-auto text-center">
+                                            <div><span x-text="match.stats.homePossession + '%'"></span></div>
+                                            <div class="text-slate-500 font-semibold">Possession</div>
+                                            <div><span x-text="match.stats.awayPossession + '%'"></span></div>
+
+                                            <div><span x-text="match.stats.homeShots"></span></div>
+                                            <div class="text-slate-500 font-semibold">Shots</div>
+                                            <div><span x-text="match.stats.awayShots"></span></div>
+
+                                            <div><span x-text="match.stats.homeYellowCards"></span> 🟨 / <span x-text="match.stats.homeRedCards"></span> 🟥</div>
+                                            <div class="text-slate-500 font-semibold">Cards</div>
+                                            <div><span x-text="match.stats.awayYellowCards"></span> 🟨 / <span x-text="match.stats.awayRedCards"></span> 🟥</div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
                         </div>
-                        
-                        <!-- Scoreboard Area -->
-                        <div class="grid grid-cols-7 items-center text-center my-2">
-                            <div class="col-span-3 text-right pr-2">
-                                <span class="block font-bold text-white" x-text="getTeamName(match.homeId)"></span>
-                                <span class="block text-xs text-slate-400" x-text="getPlayerName(match.homeId)"></span>
-                            </div>
-                            <div class="col-span-1 bg-slate-900 py-2 rounded border border-slate-800 font-mono text-lg font-bold">
-                                <span x-text="match.played ? match.homeScore : '-'"></span>
-                                <span class="text-slate-600">:</span>
-                                <span x-text="match.played ? match.awayScore : '-'"></span>
-                            </div>
-                            <div class="col-span-3 text-left pl-2">
-                                <span class="block font-bold text-white" x-text="getTeamName(match.awayId)"></span>
-                                <span class="block text-xs text-slate-400" x-text="getPlayerName(match.awayId)"></span>
-                            </div>
-                        </div>
-
-                        <!-- Expanded Detailed Statistics Panel -->
-                        <template x-if="match.played">
-                            <div class="mt-4 pt-3 border-t border-slate-900 text-xs text-slate-400 grid grid-cols-3 gap-y-1 max-w-sm mx-auto text-center">
-                                <div><span x-text="match.stats.homePossession + '%'"></span></div>
-                                <div class="text-slate-500 font-semibold">Possession</div>
-                                <div><span x-text="match.stats.awayPossession + '%'"></span></div>
-
-                                <div><span x-text="match.stats.homeShots"></span></div>
-                                <div class="text-slate-500 font-semibold">Shots</div>
-                                <div><span x-text="match.stats.awayShots"></span></div>
-
-                                <div><span x-text="match.stats.homeYellowCards"></span> 🟨 / <span x-text="match.stats.homeRedCards"></span> 🟥</div>
-                                <div class="text-slate-500 font-semibold">Cards</div>
-                                <div><span x-text="match.stats.awayYellowCards"></span> 🟨 / <span x-text="match.stats.awayRedCards"></span> 🟥</div>
-                            </div>
-                        </template>
                     </div>
                 </template>
             </div>
@@ -214,7 +222,7 @@
         <!-- 4. ADMIN CONTROL DASHBOARD -->
         <div x-show="activeTab === 'admin'" class="bg-slate-950 p-6 rounded-xl border border-rose-900/40 shadow-2xl max-w-3xl mx-auto" x-transition>
             <h2 class="text-xl font-bold text-rose-400 mb-2 flex items-center gap-2">Admin Score Input Console</h2>
-            <p class="text-xs text-slate-400 mb-6">Select a fixture below to log scores and comprehensive match performance metrics instantly.</p>
+            <p class="text-xs text-slate-400 mb-6">Select a fixture below to log scores and performance metrics instantly.</p>
             
             <div class="space-y-4">
                 <div>
@@ -222,7 +230,7 @@
                     <select x-model.number="adminForm.matchId" @change="loadAdminMatchData()" class="w-full bg-slate-900 border border-slate-800 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500">
                         <option value="">-- Choose Match --</option>
                         <template x-for="match in matches" :key="match.id">
-                            <option :value="match.id" x-text="'[' + getTeamName(match.homeId) + ' vs ' + getTeamName(match.awayId) + '] - ' + (match.played ? 'Update FT' : 'Pending')"></option>
+                            <option :value="match.id" x-text="'Round ' + match.round + ' [' + getTeamGroup(match.homeId) + ']: ' + getTeamName(match.homeId) + ' vs ' + getTeamName(match.awayId) + ' (' + (match.played ? 'Update FT' : 'Pending') + ')'"></option>
                         </template>
                     </select>
                 </div>
@@ -294,42 +302,49 @@
         </div>
     </main>
 
-    <!-- App State Engine (Core JavaScript Architecture) -->
+    <!-- App State Engine -->
     <script>
         function tournamentApp() {
             return {
                 activeTab: 'standings',
-                // Placeholder Seed Data (Players & Assigned Teams)
+                // Official Registered Group Seeding
                 teams: [
-                    { id: 1, name: 'Manchester United', player: 'Player One', group: 'A' },
-                    { id: 2, name: 'Real Madrid', player: 'Player Two', group: 'A' },
-                    { id: 3, name: 'Bayern Munich', player: 'Player Three', group: 'A' },
-                    { id: 4, name: 'PSG', player: 'Player Four', group: 'A' },
-                    { id: 5, name: 'Manchester City', player: 'Player Five', group: 'B' },
-                    { id: 6, name: 'Barcelona', player: 'Player Six', group: 'B' },
-                    { id: 7, name: 'Arsenal', player: 'Player Seven', group: 'B' },
-                    { id: 8, name: 'Inter Milan', player: 'Player Eight', group: 'B' }
+                    // Group A
+                    { id: 1, name: 'Germany', player: 'Reeshad', group: 'A' },
+                    { id: 2, name: 'France', player: 'UltNB', group: 'A' },
+                    { id: 3, name: 'England', player: 'Mahee', group: 'A' },
+                    { id: 4, name: 'Brazil', player: 'Nino', group: 'A' },
+                    // Group B
+                    { id: 5, name: 'Spain', player: 'OnionLarper', group: 'B' },
+                    { id: 6, name: 'Portugal', player: 'Tassin', group: 'B' },
+                    { id: 7, name: 'Netherlands', player: 'Aymaan', group: 'B' },
+                    { id: 8, name: 'Argentina', player: 'Anas', group: 'B' }
                 ],
-                // Full Round-Robin Schedule Data Array
+                // Structured Round-by-Round Fixtures
                 matches: [
-                    { id: 101, homeId: 1, awayId: 2, played: true, homeScore: 3, awayScore: 1, stats: { homePossession: 55, awayPossession: 45, homeShots: 11, awayShots: 6, homeYellowCards: 1, homeRedCards: 0, awayYellowCards: 2, awayRedCards: 0 } },
-                    { id: 102, homeId: 3, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
-                    { id: 103, homeId: 1, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
-                    { id: 104, homeId: 2, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
-                    
-                    { id: 201, homeId: 5, awayId: 6, played: true, homeScore: 2, awayScore: 2, stats: { homePossession: 62, awayPossession: 38, homeShots: 14, awayShots: 8, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 3, awayRedCards: 1 } },
-                    { id: 202, homeId: 7, awayId: 8, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }
+                    // GROUP A FIXTURES
+                    { id: 101, round: 1, homeId: 1, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Germany vs Brazil
+                    { id: 102, round: 1, homeId: 2, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // France vs England
+                    { id: 103, round: 2, homeId: 1, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Germany vs England
+                    { id: 104, round: 2, homeId: 2, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // France vs Brazil
+                    { id: 105, round: 3, homeId: 1, awayId: 2, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Germany vs France
+                    { id: 106, round: 3, homeId: 4, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Brazil vs England
+
+                    // GROUP B FIXTURES
+                    { id: 201, round: 1, homeId: 5, awayId: 8, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Spain vs Argentina
+                    { id: 202, round: 1, homeId: 6, awayId: 7, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Portugal vs Netherlands
+                    { id: 203, round: 2, homeId: 5, awayId: 7, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Spain vs Netherlands
+                    { id: 204, round: 2, homeId: 6, awayId: 8, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Portugal vs Argentina
+                    { id: 205, round: 3, homeId: 5, awayId: 6, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Spain vs Portugal
+                    { id: 206, round: 3, homeId: 8, awayId: 7, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }  // Argentina vs Netherlands
                 ],
-                // Admin State Controls
                 adminForm: { matchId: '', homeScore: 0, awayScore: 0, homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 },
                 selectedMatch: null,
 
-                // Helper Lookups
                 getTeamName(id) { return this.teams.find(t => t.id === id)?.name || 'Unknown'; },
                 getPlayerName(id) { return this.teams.find(t => t.id === id)?.player || ''; },
                 getTeamGroup(id) { return this.teams.find(t => t.id === id)?.group || ''; },
 
-                // Live Standings Pipeline Generator
                 getStandings(groupLetter) {
                     let groupTeams = this.teams.filter(t => t.group === groupLetter).map(t => ({
                         ...t, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
@@ -354,7 +369,6 @@
                     return groupTeams.sort((a,b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
                 },
 
-                // Dynamic Analytics Engines
                 getTopScoringTeams() {
                     return this.teams.map(t => {
                         let goals = 0;
@@ -386,7 +400,6 @@
                     }).sort((a,b) => (b.red * 3 + b.yellow) - (a.red * 3 + a.yellow)).slice(0, 5);
                 },
 
-                // Admin Form Actions
                 loadAdminMatchData() {
                     this.selectedMatch = this.matches.find(m => m.id === this.adminForm.matchId);
                     if (this.selectedMatch) {
@@ -417,7 +430,7 @@
                             awayYellowCards: this.adminForm.awayYellowCards,
                             awayRedCards: this.adminForm.awayRedCards
                         };
-                        alert("Match statistics updated successfully!");
+                        alert("Match stats logged permanently in this browser window session!");
                         this.activeTab = 'standings';
                     }
                 }
