@@ -22,7 +22,6 @@
                 <button @click="activeTab = 'standings'" :class="activeTab === 'standings' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'" class="px-4 py-2 rounded-md text-sm transition">Standings</button>
                 <button @click="activeTab = 'fixtures'" :class="activeTab === 'fixtures' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'" class="px-4 py-2 rounded-md text-sm transition">Fixtures</button>
                 <button @click="activeTab = 'stats'" :class="activeTab === 'stats' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'" class="px-4 py-2 rounded-md text-sm transition">Stats & Leaders</button>
-                <button @click="activeTab = 'admin'" :class="activeTab === 'admin' ? 'bg-rose-500 text-white font-bold' : 'text-slate-500 hover:text-white'" class="px-4 py-2 rounded-md text-sm transition">⚙️ Admin</button>
             </nav>
         </div>
     </header>
@@ -218,88 +217,6 @@
                 </ol>
             </div>
         </div>
-
-        <!-- 4. ADMIN CONTROL DASHBOARD -->
-        <div x-show="activeTab === 'admin'" class="bg-slate-950 p-6 rounded-xl border border-rose-900/40 shadow-2xl max-w-3xl mx-auto" x-transition>
-            <h2 class="text-xl font-bold text-rose-400 mb-2 flex items-center gap-2">Admin Score Input Console</h2>
-            <p class="text-xs text-slate-400 mb-6">Select a fixture below to log scores and performance metrics instantly.</p>
-            
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Select Fixture</label>
-                    <select x-model.number="adminForm.matchId" @change="loadAdminMatchData()" class="w-full bg-slate-900 border border-slate-800 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500">
-                        <option value="">-- Choose Match --</option>
-                        <template x-for="match in matches" :key="match.id">
-                            <option :value="match.id" x-text="'Round ' + match.round + ' [' + getTeamGroup(match.homeId) + ']: ' + getTeamName(match.homeId) + ' vs ' + getTeamName(match.awayId) + ' (' + (match.played ? 'Update FT' : 'Pending') + ')'"></option>
-                        </template>
-                    </select>
-                </div>
-
-                <template x-if="adminForm.matchId">
-                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-800 space-y-4">
-                        <!-- Score Row -->
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs text-slate-400 mb-1" x-text="getTeamName(selectedMatch.homeId) + ' Score'"></label>
-                                <input type="number" x-model.number="adminForm.homeScore" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-center text-white">
-                            </div>
-                            <div>
-                                <label class="block text-xs text-slate-400 mb-1" x-text="getTeamName(selectedMatch.awayId) + ' Score'"></label>
-                                <input type="number" x-model.number="adminForm.awayScore" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-center text-white">
-                            </div>
-                        </div>
-
-                        <!-- Possession Row -->
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs text-slate-400 mb-1">Home Possession %</label>
-                                <input type="number" x-model.number="adminForm.homePossession" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-center text-white">
-                            </div>
-                            <div>
-                                <label class="block text-xs text-slate-400 mb-1">Away Possession %</label>
-                                <input type="number" x-model.number="adminForm.awayPossession" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-center text-white">
-                            </div>
-                        </div>
-
-                        <!-- Shots Row -->
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs text-slate-400 mb-1">Home Shots</label>
-                                <input type="number" x-model.number="adminForm.homeShots" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-center text-white">
-                            </div>
-                            <div>
-                                <label class="block text-xs text-slate-400 mb-1">Away Shots</label>
-                                <input type="number" x-model.number="adminForm.awayShots" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-center text-white">
-                            </div>
-                        </div>
-
-                        <!-- Disciplinary Cards Row -->
-                        <div class="grid grid-cols-4 gap-2">
-                            <div>
-                                <label class="block text-xxs text-slate-400 mb-1">Home 🟨</label>
-                                <input type="number" x-model.number="adminForm.homeYellowCards" class="w-full bg-slate-950 border border-slate-800 rounded p-1 text-center text-white text-sm">
-                            </div>
-                            <div>
-                                <label class="block text-xxs text-slate-400 mb-1">Home 🟥</label>
-                                <input type="number" x-model.number="adminForm.homeRedCards" class="w-full bg-slate-950 border border-slate-800 rounded p-1 text-center text-white text-sm">
-                            </div>
-                            <div>
-                                <label class="block text-xxs text-slate-400 mb-1">Away 🟨</label>
-                                <input type="number" x-model.number="adminForm.awayYellowCards" class="w-full bg-slate-950 border border-slate-800 rounded p-1 text-center text-white text-sm">
-                            </div>
-                            <div>
-                                <label class="block text-xxs text-slate-400 mb-1">Away 🟥</label>
-                                <input type="number" x-model.number="adminForm.awayRedCards" class="w-full bg-slate-950 border border-slate-800 rounded p-1 text-center text-white text-sm">
-                            </div>
-                        </div>
-
-                        <button @click="saveMatchResults()" class="w-full bg-emerald-500 text-slate-950 py-2.5 rounded font-bold hover:bg-emerald-400 transition cursor-pointer">
-                            Submit & Recalculate Live Metrics
-                        </button>
-                    </div>
-                </template>
-            </div>
-        </div>
     </main>
 
     <!-- App State Engine -->
@@ -307,39 +224,33 @@
         function tournamentApp() {
             return {
                 activeTab: 'standings',
-                // Official Registered Group Seeding
                 teams: [
-                    // Group A
                     { id: 1, name: 'Germany', player: 'Reeshad', group: 'A' },
                     { id: 2, name: 'France', player: 'UltNB', group: 'A' },
                     { id: 3, name: 'England', player: 'Mahee', group: 'A' },
                     { id: 4, name: 'Brazil', player: 'Nino', group: 'A' },
-                    // Group B
                     { id: 5, name: 'Spain', player: 'OnionLarper', group: 'B' },
                     { id: 6, name: 'Portugal', player: 'Tassin', group: 'B' },
                     { id: 7, name: 'Netherlands', player: 'Aymaan', group: 'B' },
                     { id: 8, name: 'Argentina', player: 'Anas', group: 'B' }
                 ],
-                // Structured Round-by-Round Fixtures
                 matches: [
                     // GROUP A FIXTURES
-                    { id: 101, round: 1, homeId: 1, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Germany vs Brazil
-                    { id: 102, round: 1, homeId: 2, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // France vs England
-                    { id: 103, round: 2, homeId: 1, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Germany vs England
-                    { id: 104, round: 2, homeId: 2, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // France vs Brazil
-                    { id: 105, round: 3, homeId: 1, awayId: 2, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Germany vs France
-                    { id: 106, round: 3, homeId: 4, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Brazil vs England
+                    { id: 101, round: 1, homeId: 1, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 102, round: 1, homeId: 2, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 103, round: 2, homeId: 1, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 104, round: 2, homeId: 2, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 105, round: 3, homeId: 1, awayId: 2, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 106, round: 3, homeId: 4, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
 
                     // GROUP B FIXTURES
-                    { id: 201, round: 1, homeId: 5, awayId: 8, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Spain vs Argentina
-                    { id: 202, round: 1, homeId: 6, awayId: 7, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Portugal vs Netherlands
-                    { id: 203, round: 2, homeId: 5, awayId: 7, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Spain vs Netherlands
-                    { id: 204, round: 2, homeId: 6, awayId: 8, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Portugal vs Argentina
-                    { id: 205, round: 3, homeId: 5, awayId: 6, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }, // Spain vs Portugal
-                    { id: 206, round: 3, homeId: 8, awayId: 7, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }  // Argentina vs Netherlands
+                    { id: 201, round: 1, homeId: 5, awayId: 8, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 202, round: 1, homeId: 6, awayId: 7, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 203, round: 2, homeId: 5, awayId: 7, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 204, round: 2, homeId: 6, awayId: 8, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 205, round: 3, homeId: 5, awayId: 6, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 206, round: 3, homeId: 8, awayId: 7, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }
                 ],
-                adminForm: { matchId: '', homeScore: 0, awayScore: 0, homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 },
-                selectedMatch: null,
 
                 getTeamName(id) { return this.teams.find(t => t.id === id)?.name || 'Unknown'; },
                 getPlayerName(id) { return this.teams.find(t => t.id === id)?.player || ''; },
@@ -398,41 +309,6 @@
                         });
                         return { name: t.name, yellow, red };
                     }).sort((a,b) => (b.red * 3 + b.yellow) - (a.red * 3 + a.yellow)).slice(0, 5);
-                },
-
-                loadAdminMatchData() {
-                    this.selectedMatch = this.matches.find(m => m.id === this.adminForm.matchId);
-                    if (this.selectedMatch) {
-                        this.adminForm.homeScore = this.selectedMatch.homeScore;
-                        this.adminForm.awayScore = this.selectedMatch.awayScore;
-                        this.adminForm.homePossession = this.selectedMatch.stats.homePossession || 50;
-                        this.adminForm.awayPossession = this.selectedMatch.stats.awayPossession || 50;
-                        this.adminForm.homeShots = this.selectedMatch.stats.homeShots || 0;
-                        this.adminForm.awayShots = this.selectedMatch.stats.awayShots || 0;
-                        this.adminForm.homeYellowCards = this.selectedMatch.stats.homeYellowCards || 0;
-                        this.adminForm.homeRedCards = this.selectedMatch.stats.homeRedCards || 0;
-                        this.adminForm.awayYellowCards = this.selectedMatch.stats.awayYellowCards || 0;
-                        this.adminForm.awayRedCards = this.selectedMatch.stats.awayRedCards || 0;
-                    }
-                },
-                saveMatchResults() {
-                    if (this.selectedMatch) {
-                        this.selectedMatch.played = true;
-                        this.selectedMatch.homeScore = this.adminForm.homeScore;
-                        this.selectedMatch.awayScore = this.adminForm.awayScore;
-                        this.selectedMatch.stats = {
-                            homePossession: this.adminForm.homePossession,
-                            awayPossession: this.adminForm.awayPossession,
-                            homeShots: this.adminForm.homeShots,
-                            awayShots: this.adminForm.awayShots,
-                            homeYellowCards: this.adminForm.homeYellowCards,
-                            homeRedCards: this.adminForm.homeRedCards,
-                            awayYellowCards: this.adminForm.awayYellowCards,
-                            awayRedCards: this.adminForm.awayRedCards
-                        };
-                        alert("Match stats logged permanently in this browser window session!");
-                        this.activeTab = 'standings';
-                    }
                 }
             }
         }
