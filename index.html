@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The LIGA WC26 | Tournament Dashboard</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Alpine.js for interactive state management -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans" x-data="tournamentApp()">
+
+    <!-- Header Navigation -->
+    <header class="bg-slate-950 border-b border-slate-800 sticky top-0 z-50 shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-500 text-slate-950 font-black px-3 py-1 rounded text-sm tracking-wider">EFOOTBALL</div>
+                <h1 class="text-2xl font-black tracking-tight text-white">THE LIGA <span class="text-emerald-400">WC26</span></h1>
+            </div>
+            <nav class="flex bg-slate-900 p-1 rounded-lg border border-slate-800">
+                <button @click="activeTab = 'standings'" :class="activeTab === 'standings' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'" class="px-4 py-2 rounded-md text-sm transition">Standings</button>
+                <button @click="activeTab = 'fixtures'" :class="activeTab === 'fixtures' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'" class="px-4 py-2 rounded-md text-sm transition">Fixtures</button>
+                <button @click="activeTab = 'stats'" :class="activeTab === 'stats' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'" class="px-4 py-2 rounded-md text-sm transition">Stats & Leaders</button>
+                <button @click="activeTab = 'admin'" :class="activeTab === 'admin' ? 'bg-rose-500 text-white font-bold' : 'text-slate-500 hover:text-white'" class="px-4 py-2 rounded-md text-sm transition">⚙️ Admin</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <!-- 1. STANDINGS TAB -->
+        <div x-show="activeTab === 'standings'" class="space-y-8" x-transition>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Group A -->
+                <div class="bg-slate-950 rounded-xl border border-slate-800 p-6 shadow-xl">
+                    <h2 class="text-xl font-bold border-b border-slate-800 pb-3 mb-4 text-emerald-400 flex justify-between items-center">
+                        <span>Group A</span>
+                        <span class="text-xs text-slate-500 font-normal">Top 2 Advance</span>
+                    </h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="text-slate-400 border-b border-slate-800">
+                                    <th class="pb-2">Team (Player)</th>
+                                    <th class="pb-2 text-center w-10">MP</th>
+                                    <th class="pb-2 text-center w-10">W</th>
+                                    <th class="pb-2 text-center w-10">D</th>
+                                    <th class="pb-2 text-center w-10">L</th>
+                                    <th class="pb-2 text-center w-12">GD</th>
+                                    <th class="pb-2 text-center w-12 text-emerald-400 font-bold">Pts</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-for="(team, index) in getStandings('A')" :key="team.id">
+                                    <tr class="border-b border-slate-900 hover:bg-slate-900/50" :class="index < 2 ? 'bg-emerald-950/10' : ''">
+                                        <td class="py-3 font-medium flex items-center gap-2">
+                                            <span class="w-5 text-xs text-slate-500" x-text="index + 1"></span>
+                                            <div>
+                                                <div class="text-white font-bold" x-text="team.name"></div>
+                                                <div class="text-xs text-slate-400" x-text="team.player"></div>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 text-center text-slate-300" x-text="team.mp"></td>
+                                        <td class="py-3 text-center" x-text="team.w"></td>
+                                        <td class="py-3 text-center" x-text="team.d"></td>
+                                        <td class="py-3 text-center" x-text="team.l"></td>
+                                        <td class="py-3 text-center font-mono" :class="team.gd > 0 ? 'text-emerald-400' : (team.gd < 0 ? 'text-rose-400' : 'text-slate-400')" x-text="(team.gd > 0 ? '+' : '') + team.gd"></td>
+                                        <td class="py-3 text-center text-emerald-400 font-bold bg-slate-900/30" x-text="team.pts"></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Group B -->
+                <div class="bg-slate-950 rounded-xl border border-slate-800 p-6 shadow-xl">
+                    <h2 class="text-xl font-bold border-b border-slate-800 pb-3 mb-4 text-emerald-400 flex justify-between items-center">
+                        <span>Group B</span>
+                        <span class="text-xs text-slate-500 font-normal">Top 2 Advance</span>
+                    </h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="text-slate-400 border-b border-slate-800">
+                                    <th class="pb-2">Team (Player)</th>
+                                    <th class="pb-2 text-center w-10">MP</th>
+                                    <th class="pb-2 text-center w-10">W</th>
+                                    <th class="pb-2 text-center w-10">D</th>
+                                    <th class="pb-2 text-center w-10">L</th>
+                                    <th class="pb-2 text-center w-12">GD</th>
+                                    <th class="pb-2 text-center w-12 text-emerald-400 font-bold">Pts</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-for="(team, index) in getStandings('B')" :key="team.id">
+                                    <tr class="border-b border-slate-900 hover:bg-slate-900/50" :class="index < 2 ? 'bg-emerald-950/10' : ''">
+                                        <td class="py-3 font-medium flex items-center gap-2">
+                                            <span class="w-5 text-xs text-slate-500" x-text="index + 1"></span>
+                                            <div>
+                                                <div class="text-white font-bold" x-text="team.name"></div>
+                                                <div class="text-xs text-slate-400" x-text="team.player"></div>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 text-center text-slate-300" x-text="team.mp"></td>
+                                        <td class="py-3 text-center" x-text="team.w"></td>
+                                        <td class="py-3 text-center" x-text="team.d"></td>
+                                        <td class="py-3 text-center" x-text="team.l"></td>
+                                        <td class="py-3 text-center font-mono" :class="team.gd > 0 ? 'text-emerald-400' : (team.gd < 0 ? 'text-rose-400' : 'text-slate-400')" x-text="(team.gd > 0 ? '+' : '') + team.gd"></td>
+                                        <td class="py-3 text-center text-emerald-400 font-bold bg-slate-900/30" x-text="team.pts"></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. FIXTURES TAB -->
+        <div x-show="activeTab === 'fixtures'" class="space-y-4" x-transition>
+            <h2 class="text-xl font-bold text-white mb-4">Match Fixtures & Results (8-Min Single Leg)</h2>
+            <div class="grid gap-4 max-w-3xl mx-auto">
+                <template x-for="match in matches" :key="match.id">
+                    <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 shadow hover:border-slate-700 transition">
+                        <div class="flex justify-between items-center text-xs text-slate-500 mb-2">
+                            <span class="font-semibold text-emerald-500" x-text="'Group ' + getTeamGroup(match.homeId)"></span>
+                            <span class="px-2 py-0.5 rounded bg-slate-900" :class="match.played ? 'text-emerald-400' : 'text-amber-400'" x-text="match.played ? 'Full Time' : 'Upcoming'"></span>
+                        </div>
+                        
+                        <!-- Scoreboard Area -->
+                        <div class="grid grid-cols-7 items-center text-center my-2">
+                            <div class="col-span-3 text-right pr-2">
+                                <span class="block font-bold text-white" x-text="getTeamName(match.homeId)"></span>
+                                <span class="block text-xs text-slate-400" x-text="getPlayerName(match.homeId)"></span>
+                            </div>
+                            <div class="col-span-1 bg-slate-900 py-2 rounded border border-slate-800 font-mono text-lg font-bold">
+                                <span x-text="match.played ? match.homeScore : '-'"></span>
+                                <span class="text-slate-600">:</span>
+                                <span x-text="match.played ? match.awayScore : '-'"></span>
+                            </div>
+                            <div class="col-span-3 text-left pl-2">
+                                <span class="block font-bold text-white" x-text="getTeamName(match.awayId)"></span>
+                                <span class="block text-xs text-slate-400" x-text="getPlayerName(match.awayId)"></span>
+                            </div>
+                        </div>
+
+                        <!-- Expanded Detailed Statistics Panel -->
+                        <template x-if="match.played">
+                            <div class="mt-4 pt-3 border-t border-slate-900 text-xs text-slate-400 grid grid-cols-3 gap-y-1 max-w-sm mx-auto text-center">
+                                <div><span x-text="match.stats.homePossession + '%'"></span></div>
+                                <div class="text-slate-500 font-semibold">Possession</div>
+                                <div><span x-text="match.stats.awayPossession + '%'"></span></div>
+
+                                <div><span x-text="match.stats.homeShots"></span></div>
+                                <div class="text-slate-500 font-semibold">Shots</div>
+                                <div><span x-text="match.stats.awayShots"></span></div>
+
+                                <div><span x-text="match.stats.homeYellowCards"></span> 🟨 / <span x-text="match.stats.homeRedCards"></span> 🟥</div>
+                                <div class="text-slate-500 font-semibold">Cards</div>
+                                <div><span x-text="match.stats.awayYellowCards"></span> 🟨 / <span x-text="match.stats.awayRedCards"></span> 🟥</div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- 3. STATS LEADERS TAB -->
+        <div x-show="activeTab === 'stats'" class="grid md:grid-cols-3 gap-6" x-transition>
+            <!-- Top Teams by Goals -->
+            <div class="bg-slate-950 p-5 rounded-xl border border-slate-800 shadow-xl">
+                <h3 class="font-bold text-white mb-3 flex items-center gap-2">⚽ Top Scoring Teams</h3>
+                <ol class="space-y-2 text-sm">
+                    <template x-for="(stat, idx) in getTopScoringTeams()" :key="idx">
+                        <li class="flex justify-between p-2 bg-slate-900 rounded">
+                            <span x-text="(idx+1) + '. ' + stat.name"></span>
+                            <span class="font-bold text-emerald-400" x-text="stat.goals + ' Goals'"></span>
+                        </li>
+                    </template>
+                </ol>
+            </div>
+
+            <!-- Attack/Shots Leaderboard -->
+            <div class="bg-slate-950 p-5 rounded-xl border border-slate-800 shadow-xl">
+                <h3 class="font-bold text-white mb-3 flex items-center gap-2">🔥 Highest Shot Output</h3>
+                <ol class="space-y-2 text-sm">
+                    <template x-for="(stat, idx) in getTopShootingTeams()" :key="idx">
+                        <li class="flex justify-between p-2 bg-slate-900 rounded">
+                            <span x-text="(idx+1) + '. ' + stat.name"></span>
+                            <span class="font-bold text-cyan-400" x-text="stat.shots + ' Shots'"></span>
+                        </li>
+                    </template>
+                </ol>
+            </div>
+
+            <!-- Disciplinary Card Counter -->
+            <div class="bg-slate-950 p-5 rounded-xl border border-slate-800 shadow-xl">
+                <h3 class="font-bold text-white mb-3 flex items-center gap-2">🟥 Disciplinary Record</h3>
+                <ol class="space-y-2 text-sm">
+                    <template x-for="(stat, idx) in getCardStats()" :key="idx">
+                        <li class="flex justify-between p-2 bg-slate-900 rounded">
+                            <span x-text="(idx+1) + '. ' + stat.name"></span>
+                            <span class="font-mono text-xs">
+                                <span class="bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded" x-text="stat.yellow + ' 🟨'"></span>
+                                <span class="bg-rose-500/20 text-rose-400 px-1.5 py-0.5 rounded ml-1" x-text="stat.red + ' 🟥'"></span>
+                            </span>
+                        </li>
+                    </template>
+                </ol>
+            </div>
+        </div>
+
+        <!-- 4. ADMIN CONTROL DASHBOARD -->
+        <div x-show="activeTab === 'admin'" class="bg-slate-950 p-6 rounded-xl border border-rose-900/40 shadow-2xl max-w-3xl mx-auto" x-transition>
+            <h2 class="text-xl font-bold text-rose-400 mb-2 flex items-center gap-2">Admin Score Input Console</h2>
+            <p class="text-xs text-slate-400 mb-6">Select a fixture below to log scores and comprehensive match performance metrics instantly.</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Select Fixture</label>
+                    <select x-model.number="adminForm.matchId" @change="loadAdminMatchData()" class="w-full bg-slate-900 border border-slate-800 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                        <option value="">-- Choose Match --</option>
+                        <template x-for="match in matches" :key="match.id">
+                            <option :value="match.id" x-text="'[' + getTeamName(match.homeId) + ' vs ' + getTeamName(match.awayId) + '] - ' + (match.played ? 'Update FT' : 'Pending')"></option>
+                        </template>
+                    </select>
+                </div>
+
+                <template x-if="adminForm.matchId">
+                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-800 space-y-4">
+                        <!-- Score Row -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1" x-text="getTeamName(selectedMatch.homeId) + ' Score'"></label>
+                                <input type="number" x-model.number="adminForm.homeScore" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-center text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1" x-text="getTeamName(selectedMatch.awayId) + ' Score'"></label>
+                                <input type="number" x-model.number="adminForm.awayScore" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-center text-white">
+                            </div>
+                        </div>
+
+                        <!-- Possession Row -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">Home Possession %</label>
+                                <input type="number" x-model.number="adminForm.homePossession" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-center text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">Away Possession %</label>
+                                <input type="number" x-model.number="adminForm.awayPossession" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-center text-white">
+                            </div>
+                        </div>
+
+                        <!-- Shots Row -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">Home Shots</label>
+                                <input type="number" x-model.number="adminForm.homeShots" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-center text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">Away Shots</label>
+                                <input type="number" x-model.number="adminForm.awayShots" class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-center text-white">
+                            </div>
+                        </div>
+
+                        <!-- Disciplinary Cards Row -->
+                        <div class="grid grid-cols-4 gap-2">
+                            <div>
+                                <label class="block text-xxs text-slate-400 mb-1">Home 🟨</label>
+                                <input type="number" x-model.number="adminForm.homeYellowCards" class="w-full bg-slate-950 border border-slate-800 rounded p-1 text-center text-white text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xxs text-slate-400 mb-1">Home 🟥</label>
+                                <input type="number" x-model.number="adminForm.homeRedCards" class="w-full bg-slate-950 border border-slate-800 rounded p-1 text-center text-white text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xxs text-slate-400 mb-1">Away 🟨</label>
+                                <input type="number" x-model.number="adminForm.awayYellowCards" class="w-full bg-slate-950 border border-slate-800 rounded p-1 text-center text-white text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xxs text-slate-400 mb-1">Away 🟥</label>
+                                <input type="number" x-model.number="adminForm.awayRedCards" class="w-full bg-slate-950 border border-slate-800 rounded p-1 text-center text-white text-sm">
+                            </div>
+                        </div>
+
+                        <button @click="saveMatchResults()" class="w-full bg-emerald-500 text-slate-950 py-2.5 rounded font-bold hover:bg-emerald-400 transition cursor-pointer">
+                            Submit & Recalculate Live Metrics
+                        </button>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </main>
+
+    <!-- App State Engine (Core JavaScript Architecture) -->
+    <script>
+        function tournamentApp() {
+            return {
+                activeTab: 'standings',
+                // Placeholder Seed Data (Players & Assigned Teams)
+                teams: [
+                    { id: 1, name: 'Manchester United', player: 'Player One', group: 'A' },
+                    { id: 2, name: 'Real Madrid', player: 'Player Two', group: 'A' },
+                    { id: 3, name: 'Bayern Munich', player: 'Player Three', group: 'A' },
+                    { id: 4, name: 'PSG', player: 'Player Four', group: 'A' },
+                    { id: 5, name: 'Manchester City', player: 'Player Five', group: 'B' },
+                    { id: 6, name: 'Barcelona', player: 'Player Six', group: 'B' },
+                    { id: 7, name: 'Arsenal', player: 'Player Seven', group: 'B' },
+                    { id: 8, name: 'Inter Milan', player: 'Player Eight', group: 'B' }
+                ],
+                // Full Round-Robin Schedule Data Array
+                matches: [
+                    { id: 101, homeId: 1, awayId: 2, played: true, homeScore: 3, awayScore: 1, stats: { homePossession: 55, awayPossession: 45, homeShots: 11, awayShots: 6, homeYellowCards: 1, homeRedCards: 0, awayYellowCards: 2, awayRedCards: 0 } },
+                    { id: 102, homeId: 3, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 103, homeId: 1, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 104, homeId: 2, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    
+                    { id: 201, homeId: 5, awayId: 6, played: true, homeScore: 2, awayScore: 2, stats: { homePossession: 62, awayPossession: 38, homeShots: 14, awayShots: 8, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 3, awayRedCards: 1 } },
+                    { id: 202, homeId: 7, awayId: 8, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }
+                ],
+                // Admin State Controls
+                adminForm: { matchId: '', homeScore: 0, awayScore: 0, homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 },
+                selectedMatch: null,
+
+                // Helper Lookups
+                getTeamName(id) { return this.teams.find(t => t.id === id)?.name || 'Unknown'; },
+                getPlayerName(id) { return this.teams.find(t => t.id === id)?.player || ''; },
+                getTeamGroup(id) { return this.teams.find(t => t.id === id)?.group || ''; },
+
+                // Live Standings Pipeline Generator
+                getStandings(groupLetter) {
+                    let groupTeams = this.teams.filter(t => t.group === groupLetter).map(t => ({
+                        ...t, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
+                    }));
+
+                    this.matches.filter(m => m.played).forEach(m => {
+                        let home = groupTeams.find(t => t.id === m.homeId);
+                        let away = groupTeams.find(t => t.id === m.awayId);
+
+                        if (home && away) {
+                            home.mp++; away.mp++;
+                            home.gf += m.homeScore; home.ga += m.awayScore;
+                            away.gf += m.awayScore; away.ga += m.homeScore;
+
+                            if (m.homeScore > m.awayScore) { home.w++; home.pts += 3; away.l++; }
+                            else if (m.homeScore < m.awayScore) { away.w++; away.pts += 3; home.l++; }
+                            else { home.d++; away.d++; home.pts += 1; away.pts += 1; }
+                        }
+                    });
+
+                    groupTeams.forEach(t => t.gd = t.gf - t.ga);
+                    return groupTeams.sort((a,b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+                },
+
+                // Dynamic Analytics Engines
+                getTopScoringTeams() {
+                    return this.teams.map(t => {
+                        let goals = 0;
+                        this.matches.filter(m => m.played).forEach(m => {
+                            if (m.homeId === t.id) goals += m.homeScore;
+                            if (m.awayId === t.id) goals += m.awayScore;
+                        });
+                        return { name: t.name, goals };
+                    }).sort((a,b) => b.goals - a.goals).slice(0, 5);
+                },
+                getTopShootingTeams() {
+                    return this.teams.map(t => {
+                        let shots = 0;
+                        this.matches.filter(m => m.played).forEach(m => {
+                            if (m.homeId === t.id) shots += m.stats.homeShots;
+                            if (m.awayId === t.id) shots += m.stats.awayShots;
+                        });
+                        return { name: t.name, shots };
+                    }).sort((a,b) => b.shots - a.shots).slice(0, 5);
+                },
+                getCardStats() {
+                    return this.teams.map(t => {
+                        let yellow = 0, red = 0;
+                        this.matches.filter(m => m.played).forEach(m => {
+                            if (m.homeId === t.id) { yellow += m.stats.homeYellowCards; red += m.stats.homeRedCards; }
+                            if (m.awayId === t.id) { yellow += m.stats.awayYellowCards; red += m.stats.awayRedCards; }
+                        });
+                        return { name: t.name, yellow, red };
+                    }).sort((a,b) => (b.red * 3 + b.yellow) - (a.red * 3 + a.yellow)).slice(0, 5);
+                },
+
+                // Admin Form Actions
+                loadAdminMatchData() {
+                    this.selectedMatch = this.matches.find(m => m.id === this.adminForm.matchId);
+                    if (this.selectedMatch) {
+                        this.adminForm.homeScore = this.selectedMatch.homeScore;
+                        this.adminForm.awayScore = this.selectedMatch.awayScore;
+                        this.adminForm.homePossession = this.selectedMatch.stats.homePossession || 50;
+                        this.adminForm.awayPossession = this.selectedMatch.stats.awayPossession || 50;
+                        this.adminForm.homeShots = this.selectedMatch.stats.homeShots || 0;
+                        this.adminForm.awayShots = this.selectedMatch.stats.awayShots || 0;
+                        this.adminForm.homeYellowCards = this.selectedMatch.stats.homeYellowCards || 0;
+                        this.adminForm.homeRedCards = this.selectedMatch.stats.homeRedCards || 0;
+                        this.adminForm.awayYellowCards = this.selectedMatch.stats.awayYellowCards || 0;
+                        this.adminForm.awayRedCards = this.selectedMatch.stats.awayRedCards || 0;
+                    }
+                },
+                saveMatchResults() {
+                    if (this.selectedMatch) {
+                        this.selectedMatch.played = true;
+                        this.selectedMatch.homeScore = this.adminForm.homeScore;
+                        this.selectedMatch.awayScore = this.adminForm.awayScore;
+                        this.selectedMatch.stats = {
+                            homePossession: this.adminForm.homePossession,
+                            awayPossession: this.adminForm.awayPossession,
+                            homeShots: this.adminForm.homeShots,
+                            awayShots: this.adminForm.awayShots,
+                            homeYellowCards: this.adminForm.homeYellowCards,
+                            homeRedCards: this.adminForm.homeRedCards,
+                            awayYellowCards: this.adminForm.awayYellowCards,
+                            awayRedCards: this.adminForm.awayRedCards
+                        };
+                        alert("Match statistics updated successfully!");
+                        this.activeTab = 'standings';
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
