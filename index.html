@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
     <title>The LIGA WC26 | Tournament Dashboard</title>
     <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- App State Engine (Defined BEFORE Alpine loads to prevent ReferenceErrors) -->
     <script>
@@ -24,20 +24,116 @@
                 ],
                 matches: [
                     // GROUP A FIXTURES
-                    { id: 101, round: 1, homeId: 1, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
-                    { id: 102, round: 1, homeId: 2, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
-                    { id: 103, round: 2, homeId: 1, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
-                    { id: 104, round: 2, homeId: 2, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
-                    { id: 105, round: 3, homeId: 1, awayId: 2, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
-                    { id: 106, round: 3, homeId: 4, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 101, round: 1, homeId: 1, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeShotsOnTarget: 0, awayShotsOnTarget: 0, homePasses: 0, awayPasses: 0, homeSuccessfulPasses: 0, awaySuccessfulPasses: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { 
+                        id: 102, 
+                        round: 1, 
+                        homeId: 2, 
+                        awayId: 3, 
+                        played: true, 
+                        homeScore: 1, 
+                        awayScore: 2, 
+                        stats: { 
+                            homePossession: 42, 
+                            awayPossession: 58, 
+                            homeShots: 8, 
+                            awayShots: 3, 
+                            homeShotsOnTarget: 6, 
+                            awayShotsOnTarget: 3, 
+                            homePasses: 54, 
+                            awayPasses: 116, 
+                            homeSuccessfulPasses: 34, 
+                            awaySuccessfulPasses: 91, 
+                            homeYellowCards: 0, 
+                            homeRedCards: 0, 
+                            awayYellowCards: 0, 
+                            awayRedCards: 0 
+                        } 
+                    }, // England 2-1 France (France is home, England is away)
+                    { id: 103, round: 2, homeId: 1, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeShotsOnTarget: 0, awayShotsOnTarget: 0, homePasses: 0, awayPasses: 0, homeSuccessfulPasses: 0, awaySuccessfulPasses: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 104, round: 2, homeId: 2, awayId: 4, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeShotsOnTarget: 0, awayShotsOnTarget: 0, homePasses: 0, awayPasses: 0, homeSuccessfulPasses: 0, awaySuccessfulPasses: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 105, round: 3, homeId: 1, awayId: 2, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeShotsOnTarget: 0, awayShotsOnTarget: 0, homePasses: 0, awayPasses: 0, homeSuccessfulPasses: 0, awaySuccessfulPasses: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 106, round: 3, homeId: 4, awayId: 3, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeShotsOnTarget: 0, awayShotsOnTarget: 0, homePasses: 0, awayPasses: 0, homeSuccessfulPasses: 0, awaySuccessfulPasses: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
 
                     // GROUP B FIXTURES
-                    { id: 201, round: 1, homeId: 5, awayId: 8, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
-                    { id: 202, round: 1, homeId: 6, awayId: 7, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
-                    { id: 203, round: 2, homeId: 5, awayId: 7, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
-                    { id: 204, round: 2, homeId: 6, awayId: 8, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
-                    { id: 205, round: 3, homeId: 5, awayId: 6, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
-                    { id: 206, round: 3, homeId: 8, awayId: 7, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } }
+                    { 
+                        id: 201, 
+                        round: 1, 
+                        homeId: 5, 
+                        awayId: 8, 
+                        played: true, 
+                        homeScore: 0, 
+                        awayScore: 1, 
+                        stats: { 
+                            homePossession: 34, 
+                            awayPossession: 66, 
+                            homeShots: 0, 
+                            awayShots: 8, 
+                            homeShotsOnTarget: 0, 
+                            awayShotsOnTarget: 4, 
+                            homePasses: 56, 
+                            awayPasses: 134, 
+                            homeSuccessfulPasses: 30, 
+                            awaySuccessfulPasses: 112, 
+                            homeYellowCards: 0, 
+                            homeRedCards: 0, 
+                            awayYellowCards: 0, 
+                            awayRedCards: 0 
+                        } 
+                    }, // Argentina 1-0 Spain (Spain is home, Argentina is away)
+                    { 
+                        id: 202, 
+                        round: 1, 
+                        homeId: 6, 
+                        awayId: 7, 
+                        played: true, 
+                        homeScore: 0, 
+                        awayScore: 0, 
+                        stats: { 
+                            homePossession: 24, 
+                            awayPossession: 76, 
+                            homeShots: 0, 
+                            awayShots: 4, 
+                            homeShotsOnTarget: 0, 
+                            awayShotsOnTarget: 2, 
+                            homePasses: 35, 
+                            awayPasses: 104, 
+                            homeSuccessfulPasses: 21, 
+                            awaySuccessfulPasses: 88, 
+                            homeYellowCards: 0, 
+                            homeRedCards: 0, 
+                            awayYellowCards: 0, 
+                            awayRedCards: 0 
+                        } 
+                    }, // Portugal 0-0 Netherlands (Portugal is home, Netherlands is away)
+                    { id: 203, round: 2, homeId: 5, awayId: 7, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeShotsOnTarget: 0, awayShotsOnTarget: 0, homePasses: 0, awayPasses: 0, homeSuccessfulPasses: 0, awaySuccessfulPasses: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 204, round: 2, homeId: 6, awayId: 8, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeShotsOnTarget: 0, awayShotsOnTarget: 0, homePasses: 0, awayPasses: 0, homeSuccessfulPasses: 0, awaySuccessfulPasses: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { id: 205, round: 3, homeId: 5, awayId: 6, played: false, homeScore: 0, awayScore: 0, stats: { homePossession: 50, awayPossession: 50, homeShots: 0, awayShots: 0, homeShotsOnTarget: 0, awayShotsOnTarget: 0, homePasses: 0, awayPasses: 0, homeSuccessfulPasses: 0, awaySuccessfulPasses: 0, homeYellowCards: 0, homeRedCards: 0, awayYellowCards: 0, awayRedCards: 0 } },
+                    { 
+                        id: 206, 
+                        round: 3, 
+                        homeId: 8, 
+                        awayId: 7, 
+                        played: true, 
+                        homeScore: 2, 
+                        awayScore: 3, 
+                        stats: { 
+                            homePossession: 55, 
+                            awayPossession: 45, 
+                            homeShots: 3, 
+                            awayShots: 4, 
+                            homeShotsOnTarget: 2, 
+                            awayShotsOnTarget: 3, 
+                            homePasses: 120, 
+                            awayPasses: 55, 
+                            homeSuccessfulPasses: 98, 
+                            awaySuccessfulPasses: 47, 
+                            homeYellowCards: 0, 
+                            homeRedCards: 0, 
+                            awayYellowCards: 0, 
+                            awayRedCards: 0 
+                        } 
+                    } // Argentina 2-3 Netherlands (Argentina is home, Netherlands is away)
                 ],
 
                 getTeamName(id) { return this.teams.find(t => t.id === id)?.name || 'Unknown'; },
@@ -78,32 +174,49 @@
                         return { name: t.name, goals };
                     }).sort((a,b) => b.goals - a.goals).slice(0, 5);
                 },
+
                 getTopShootingTeams() {
                     return this.teams.map(t => {
                         let shots = 0;
+                        let targetShots = 0;
                         this.matches.filter(m => m.played).forEach(m => {
-                            if (m.homeId === t.id) shots += m.stats.homeShots;
-                            if (m.awayId === t.id) shots += m.stats.awayShots;
+                            if (m.homeId === t.id) {
+                                shots += m.stats.homeShots;
+                                targetShots += (m.stats.homeShotsOnTarget || 0);
+                            }
+                            if (m.awayId === t.id) {
+                                shots += m.stats.awayShots;
+                                targetShots += (m.stats.awayShotsOnTarget || 0);
+                            }
                         });
-                        return { name: t.name, shots };
+                        return { name: t.name, shots, targetShots };
                     }).sort((a,b) => b.shots - a.shots).slice(0, 5);
                 },
-                getCardStats() {
+
+                getPassingStats() {
                     return this.teams.map(t => {
-                        let yellow = 0, red = 0;
+                        let totalPasses = 0;
+                        let successfulPasses = 0;
                         this.matches.filter(m => m.played).forEach(m => {
-                            if (m.homeId === t.id) { yellow += m.stats.homeYellowCards; red += m.stats.homeRedCards; }
-                            if (m.awayId === t.id) { yellow += m.stats.awayYellowCards; red += m.stats.awayRedCards; }
+                            if (m.homeId === t.id && m.stats.homePasses) {
+                                totalPasses += m.stats.homePasses;
+                                successfulPasses += m.stats.homeSuccessfulPasses;
+                            }
+                            if (m.awayId === t.id && m.stats.awayPasses) {
+                                totalPasses += m.stats.awayPasses;
+                                successfulPasses += m.stats.awaySuccessfulPasses;
+                            }
                         });
-                        return { name: t.name, yellow, red };
-                    }).sort((a,b) => (b.red * 3 + b.yellow) - (a.red * 3 + a.yellow)).slice(0, 5);
+                        let accuracy = totalPasses > 0 ? Math.round((successfulPasses / totalPasses) * 100) : 0;
+                        return { name: t.name, accuracy, successful: successfulPasses, total: totalPasses };
+                    }).sort((a,b) => b.accuracy - a.accuracy || b.successful - a.successful).slice(0, 5);
                 }
             }
         }
     </script>
 
     <!-- Alpine.js (Loaded with defer so it executes safely AFTER tournamentApp is declared) -->
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
     <style>
         /* Touch scrollbar optimizations for dynamic tables */
@@ -134,17 +247,17 @@
             <nav class="flex w-full md:w-auto bg-slate-900 p-1 rounded-lg border border-slate-800 text-center">
                 <button @click="activeTab = 'standings'" 
                         :class="activeTab === 'standings' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'" 
-                        class="flex-1 md:flex-none px-3 py-2.5 rounded-md text-xs sm:text-sm transition duration-150 min-h-[44px]">
+                        class="flex-1 md:flex-none px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition duration-150 min-h-[44px]">
                     Standings
                 </button>
                 <button @click="activeTab = 'fixtures'" 
                         :class="activeTab === 'fixtures' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'" 
-                        class="flex-1 md:flex-none px-3 py-2.5 rounded-md text-xs sm:text-sm transition duration-150 min-h-[44px]">
+                        class="flex-1 md:flex-none px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition duration-150 min-h-[44px]">
                     Fixtures
                 </button>
                 <button @click="activeTab = 'stats'" 
                         :class="activeTab === 'stats' ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'" 
-                        class="flex-1 md:flex-none px-3 py-2.5 rounded-md text-xs sm:text-sm transition duration-150 min-h-[44px]">
+                        class="flex-1 md:flex-none px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition duration-150 min-h-[44px]">
                     Stats
                 </button>
             </nav>
@@ -282,27 +395,36 @@
                                         </div>
                                     </div>
 
-                                    <!-- Compact Detailed Stats -->
+                                    <!-- Compact Detailed Stats (Enhanced with shots on target & successful passes) -->
                                     <template x-if="match.played">
                                         <div class="mt-3 pt-3 border-t border-slate-900 text-[10px] text-slate-400 grid grid-cols-3 gap-y-1.5 max-w-sm mx-auto text-center font-medium">
-                                            <div><span class="font-mono" x-text="match.stats.homePossession + '%'"></span></div>
+                                            <!-- Possession Row -->
+                                            <div><span class="font-mono text-white text-xs" x-text="match.stats.homePossession + '%'"></span></div>
                                             <div class="text-slate-500 uppercase tracking-widest text-[9px] font-bold">Possession</div>
-                                            <div><span class="font-mono" x-text="match.stats.awayPossession + '%'"></span></div>
+                                            <div><span class="font-mono text-white text-xs" x-text="match.stats.awayPossession + '%'"></span></div>
 
-                                            <div><span class="font-mono" x-text="match.stats.homeShots"></span></div>
-                                            <div class="text-slate-500 uppercase tracking-widest text-[9px] font-bold">Shots</div>
-                                            <div><span class="font-mono" x-text="match.stats.awayShots"></span></div>
-
+                                            <!-- Shots Row -->
                                             <div>
-                                                <span class="font-mono" x-text="match.stats.homeYellowCards"></span> 🟨
-                                                <span class="font-mono text-slate-700 mx-0.5">/</span>
-                                                <span class="font-mono" x-text="match.stats.homeRedCards"></span> 🟥
+                                                <span class="font-mono text-white text-xs" x-text="match.stats.homeShots"></span>
+                                                <span class="text-slate-500" x-text="' (' + (match.stats.homeShotsOnTarget || 0) + ')'"></span>
                                             </div>
-                                            <div class="text-slate-500 uppercase tracking-widest text-[9px] font-bold">Cards</div>
+                                            <div class="text-slate-500 uppercase tracking-widest text-[9px] font-bold">Shots (On Target)</div>
                                             <div>
-                                                <span class="font-mono" x-text="match.stats.awayYellowCards"></span> 🟨
-                                                <span class="font-mono text-slate-700 mx-0.5">/</span>
-                                                <span class="font-mono" x-text="match.stats.awayRedCards"></span> 🟥
+                                                <span class="font-mono text-white text-xs" x-text="match.stats.awayShots"></span>
+                                                <span class="text-slate-500" x-text="' (' + (match.stats.awayShotsOnTarget || 0) + ')'"></span>
+                                            </div>
+
+                                            <!-- Passes Row -->
+                                            <div>
+                                                <span class="font-mono text-white text-xs" x-text="match.stats.homeSuccessfulPasses"></span>
+                                                <span class="text-slate-500" x-text="'/' + match.stats.homePasses"></span>
+                                                <span class="text-emerald-400 font-mono block text-[9px]" x-text="match.stats.homePasses > 0 ? Math.round((match.stats.homeSuccessfulPasses / match.stats.homePasses) * 100) + '%' : '0%'"></span>
+                                            </div>
+                                            <div class="text-slate-500 uppercase tracking-widest text-[9px] font-bold pt-1">Pass Completion</div>
+                                            <div>
+                                                <span class="font-mono text-white text-xs" x-text="match.stats.awaySuccessfulPasses"></span>
+                                                <span class="text-slate-500" x-text="'/' + match.stats.awayPasses"></span>
+                                                <span class="text-emerald-400 font-mono block text-[9px]" x-text="match.stats.awayPasses > 0 ? Math.round((match.stats.awaySuccessfulPasses / match.stats.awayPasses) * 100) + '%' : '0%'"></span>
                                             </div>
                                         </div>
                                     </template>
@@ -317,45 +439,54 @@
         <!-- 3. STATS LEADERS TAB (Fully Responsive Grids) -->
         <div x-show="activeTab === 'stats'" class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6" x-transition>
             <!-- Top Teams by Goals -->
-            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 shadow-xl">
-                <h3 class="font-bold text-white text-sm mb-3 flex items-center gap-1.5">⚽ Top Scoring Teams</h3>
-                <ol class="space-y-1.5 text-xs sm:text-sm">
-                    <template x-for="(stat, idx) in getTopScoringTeams()" :key="idx">
-                        <li class="flex justify-between p-2 bg-slate-900 rounded items-center">
-                            <span class="font-medium truncate pr-2" x-text="(idx+1) + '. ' + stat.name"></span>
-                            <span class="font-bold text-emerald-400 font-mono shrink-0" x-text="stat.goals + ' G'"></span>
-                        </li>
-                    </template>
-                </ol>
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 shadow-xl flex flex-col justify-between">
+                <div>
+                    <h3 class="font-bold text-white text-sm mb-3 flex items-center gap-1.5">⚽ Top Scoring Teams</h3>
+                    <ol class="space-y-1.5 text-xs sm:text-sm">
+                        <template x-for="(stat, idx) in getTopScoringTeams()" :key="idx">
+                            <li class="flex justify-between p-2 bg-slate-900 rounded items-center">
+                                <span class="font-medium truncate pr-2" x-text="(idx+1) + '. ' + stat.name"></span>
+                                <span class="font-bold text-emerald-400 font-mono shrink-0" x-text="stat.goals + ' G'"></span>
+                            </li>
+                        </template>
+                    </ol>
+                </div>
             </div>
 
             <!-- Attack/Shots Leaderboard -->
-            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 shadow-xl">
-                <h3 class="font-bold text-white text-sm mb-3 flex items-center gap-1.5">🔥 Highest Shot Output</h3>
-                <ol class="space-y-1.5 text-xs sm:text-sm">
-                    <template x-for="(stat, idx) in getTopShootingTeams()" :key="idx">
-                        <li class="flex justify-between p-2 bg-slate-900 rounded items-center">
-                            <span class="font-medium truncate pr-2" x-text="(idx+1) + '. ' + stat.name"></span>
-                            <span class="font-bold text-cyan-400 font-mono shrink-0" x-text="stat.shots + ' S'"></span>
-                        </li>
-                    </template>
-                </ol>
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 shadow-xl flex flex-col justify-between">
+                <div>
+                    <h3 class="font-bold text-white text-sm mb-3 flex items-center gap-1.5">🔥 Shot Generation & Target Rate</h3>
+                    <ol class="space-y-1.5 text-xs sm:text-sm">
+                        <template x-for="(stat, idx) in getTopShootingTeams()" :key="idx">
+                            <li class="flex justify-between p-2 bg-slate-900 rounded items-center">
+                                <span class="font-medium truncate pr-2" x-text="(idx+1) + '. ' + stat.name"></span>
+                                <div class="text-right shrink-0">
+                                    <span class="font-bold text-cyan-400 font-mono" x-text="stat.shots + ' S'"></span>
+                                    <span class="text-[10px] text-slate-500 font-mono block" x-text="'Target: ' + stat.targetShots"></span>
+                                </div>
+                            </li>
+                        </template>
+                    </ol>
+                </div>
             </div>
 
-            <!-- Disciplinary Card Counter -->
-            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 shadow-xl">
-                <h3 class="font-bold text-white text-sm mb-3 flex items-center gap-1.5">🟥 Disciplinary Record</h3>
-                <ol class="space-y-1.5 text-xs sm:text-sm">
-                    <template x-for="(stat, idx) in getCardStats()" :key="idx">
-                        <li class="flex justify-between p-2 bg-slate-900 rounded items-center">
-                            <span class="font-medium truncate pr-2" x-text="(idx+1) + '. ' + stat.name"></span>
-                            <span class="font-mono text-[10px] shrink-0 flex gap-1">
-                                <span class="bg-amber-500/20 text-amber-400 px-1 py-0.5 rounded font-bold" x-text="stat.yellow + ' 🟨'"></span>
-                                <span class="bg-rose-500/20 text-rose-400 px-1 py-0.5 rounded font-bold" x-text="stat.red + ' 🟥'"></span>
-                            </span>
-                        </li>
-                    </template>
-                </ol>
+            <!-- Passing Accuracy Leaderboard (Replaced Disciplinary counter) -->
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 shadow-xl flex flex-col justify-between">
+                <div>
+                    <h3 class="font-bold text-white text-sm mb-3 flex items-center gap-1.5">🎯 Passing Accuracy</h3>
+                    <ol class="space-y-1.5 text-xs sm:text-sm">
+                        <template x-for="(stat, idx) in getPassingStats()" :key="idx">
+                            <li class="flex justify-between p-2 bg-slate-900 rounded items-center">
+                                <div class="truncate pr-2">
+                                    <span class="font-medium" x-text="(idx+1) + '. ' + stat.name"></span>
+                                    <span class="text-[9px] text-slate-500 block font-mono" x-text="'Comp: ' + stat.successful + '/' + stat.total"></span>
+                                </div>
+                                <span class="font-bold text-emerald-400 font-mono shrink-0 text-right text-xs sm:text-sm" x-text="stat.accuracy + '%'"></span>
+                            </li>
+                        </template>
+                    </ol>
+                </div>
             </div>
         </div>
     </main>
